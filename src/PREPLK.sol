@@ -17,6 +17,9 @@ contract PreParaLink is
     Ownable2StepUpgradeable,
     UUPSUpgradeable
 {
+    // This function must be overridden to include access restriction to the upgrade mechanism.
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
         _disableInitializers();
@@ -52,8 +55,6 @@ contract PreParaLink is
     function CLOCK_MODE() public pure override returns (string memory) {
         return "mode=timestamp";
     }
-
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     // The following functions are overrides required by Solidity.
 
