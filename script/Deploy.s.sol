@@ -16,6 +16,7 @@ contract Deploy is Script {
     }
 
     function run() public broadcast {
+        safeconsole.log("Chain Id: ", block.chainid);
         address proxy =
             Upgrades.deployUUPSProxy("PREPLK.sol:PreParaLink", abi.encodeCall(PreParaLink.initialize, (treasury)));
         safeconsole.log("Proxy: ", proxy);
