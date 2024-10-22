@@ -14,7 +14,7 @@ contract PreParaLink is
     ERC20Upgradeable,
     ERC20PermitUpgradeable,
     ERC20VotesUpgradeable,
-    OwnableUpgradeable,
+    Ownable2StepUpgradeable,
     UUPSUpgradeable
 {
     /// @custom:oz-upgrades-unsafe-allow constructor
