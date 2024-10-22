@@ -29,7 +29,7 @@ contract PreParaLink is
         __Ownable_init(initialOwner);
         __UUPSUpgradeable_init();
 
-        _mint(initialOwner, 100000 * 10 ** decimals());
+        _mint(initialOwner, 100_000 * 10 ** decimals());
     }
 
     function transfer(address to, uint256 value) public override onlyOwner returns (bool) {
