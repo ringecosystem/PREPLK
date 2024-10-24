@@ -7,7 +7,7 @@ import {Upgrades} from "openzeppelin-foundry-upgrades/Upgrades.sol";
 import {PreParaLink} from "../src/PREPLK.sol";
 
 contract Deploy is Script {
-    address treasury = 0x0f14341A7f464320319025540E8Fe48Ad0fe5aec;
+    address treasury = 0x05101B3856c803bd1B01F18eEa98C011fe88E3ea;
 
     modifier broadcast() {
         vm.startBroadcast();

@@ -15,7 +15,7 @@ bytecode_hash = "ipfs"
 extra_output = ["storageLayout"]
 extra_output_files = ["metadata"]
 fs_permissions = [{ access = "read", path = "out" }]
-eth_rpc_url = "https://koi-rpc.darwinia.network"
+eth_rpc_url = "https://rpc.darwinia.network"
 
 [rpc_endpoints]
 koi = "https://koi-rpc.darwinia.network"
