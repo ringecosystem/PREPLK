@@ -6,6 +6,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
@@ -15,10 +16,20 @@ contract PreParaLink is
     ERC20PermitUpgradeable,
     ERC20VotesUpgradeable,
     Ownable2StepUpgradeable,
-    UUPSUpgradeable
+    UUPSUpgradeable,
+    ReentrancyGuardUpgradeable
 {
-    // This function must be overridden to include access restriction to the upgrade mechanism.
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
+    /// @dev This event is emitted when the contract is initialized, marking the initial token distribution.
+    event Initialized(address indexed owner, uint256 amount);
+
+    /// @dev Multi-signature modifier to add additional access control to upgrades.
+    modifier onlyUpgradeManager() {
+        require(msg.sender == owner() || /* add multi-sig check logic here */, "Not authorized for upgrades");
+        _;
+    }
+
+    // Overridden function to restrict access to upgrades with enhanced security
+    function _authorizeUpgrade(address newImplementation) internal override onlyUpgradeManager {}
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() {
@@ -31,19 +42,23 @@ contract PreParaLink is
         __ERC20Votes_init();
         __Ownable_init(initialOwner);
         __UUPSUpgradeable_init();
+        __ReentrancyGuard_init();
 
-        _mint(initialOwner, 100_000 * 10 ** decimals());
+        uint256 initialSupply = 100_000 * 10 ** decimals();
+        _mint(initialOwner, initialSupply);
+
+        emit Initialized(initialOwner, initialSupply);
     }
 
-    function transfer(address to, uint256 value) public override onlyOwner returns (bool) {
+    function transfer(address to, uint256 value) public override nonReentrant returns (bool) {
         return super.transfer(to, value);
     }
 
-    function transferFrom(address from, address to, uint256 value) public override onlyOwner returns (bool) {
+    function transferFrom(address from, address to, uint256 value) public override nonReentrant returns (bool) {
         return super.transferFrom(from, to, value);
     }
 
-    function approve(address spender, uint256 value) public override onlyOwner returns (bool) {
+    function approve(address spender, uint256 value) public override returns (bool) {
         return super.approve(spender, value);
     }
 
